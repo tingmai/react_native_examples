@@ -1,0 +1,737 @@
+File-Based Navigation
+
+=============================
+
+
+React Native File-Based Navigation Example
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+Here's a complete implementation of file-based navigation for Home, About, Contact, Login, Register pages using Expo Router, which provides a filesystem-based routing solution.
+
+Project Setup
+
+
+First, create a new Expo project and install required dependencies:
+
+command:
+
+npx create-expo-app FileBasedNavigation
+cd FileBasedNavigation
+npx expo install expo-router react-native-safe-area-context react-native-screens
+
+--------------------------------------------------
+Project Structure
+text
+app/
+├── (tabs)/               # Tab navigation group
+│   ├── _layout.js       # Layout for tabs
+│   ├── home.js          # Home screen
+│   ├── about.js         # About screen
+│   └── contact.js       # Contact screen
+├── login.js             # Login screen
+├── register.js          # Register screen
+├── _layout.js          # Root layout
+└── index.js            # Redirects to home screen
+Implementation Files
+1. Root Layout (app/_layout.js)
+jsx
+import { Stack } from 'expo-router';
+
+export default function RootLayout() {
+  return (
+    <Stack>
+      <Stack.Screen 
+        name="(tabs)" 
+        options={{ headerShown: false }} 
+      />
+      <Stack.Screen 
+        name="login" 
+        options={{ 
+          title: 'Login',
+          presentation: 'modal' 
+        }} 
+      />
+      <Stack.Screen 
+        name="register" 
+        options={{ 
+          title: 'Register',
+          presentation: 'modal' 
+        }} 
+      />
+    </Stack>
+  );
+}
+
+---------------------------------------
+2. Tabs Layout (app/(tabs)/_layout.js)
+-----------------------------------------
+
+
+jsx
+import { Tabs } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
+
+export default function TabLayout() {
+  return (
+    <Tabs
+      screenOptions={{
+        tabBarActiveTintColor: 'blue',
+      }}
+    >
+      <Tabs.Screen
+        name="home"
+        options={{
+          title: 'Home',
+          tabBarIcon: ({ color }) => (
+            <Ionicons name="home" size={24} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="about"
+        options={{
+          title: 'About',
+          tabBarIcon: ({ color }) => (
+            <Ionicons name="information-circle" size={24} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="contact"
+        options={{
+          title: 'Contact',
+          tabBarIcon: ({ color }) => (
+            <Ionicons name="mail" size={24} color={color} />
+          ),
+        }}
+      />
+    </Tabs>
+  );
+}
+
+---------------------------------------
+3. Home Screen (app/(tabs)/home.js)
+
+----------------------------------------
+
+
+jsx
+import { View, Text, StyleSheet, Button } from 'react-native';
+import { Link } from 'expo-router';
+
+export default function HomePage() {
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Welcome to our App!</Text>
+      
+      <Link href="/about" style={styles.link}>
+        <Text>About Us</Text>
+      </Link>
+      
+      <Link href="/contact" style={styles.link}>
+        <Text>Contact Us</Text>
+      </Link>
+      
+      <Link href="/login" asChild>
+        <Button title="Login" />
+      </Link>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  title: {
+    fontSize: 24,
+    marginBottom: 20,
+  },
+  link: {
+    marginVertical: 10,
+    padding: 10,
+    backgroundColor: '#eee',
+    borderRadius: 5,
+  },
+});
+
+---------------------------------
+
+4. About Screen (app/(tabs)/about.js)
+--------------------------------------
+
+jsx
+import { View, Text, StyleSheet } from 'react-native';
+import { Link } from 'expo-router';
+
+export default function AboutPage() {
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>About Us</Text>
+      <Text style={styles.text}>
+        We are a company dedicated to creating amazing mobile experiences.
+      </Text>
+      <Link href="/" style={styles.link}>
+        <Text>Back to Home</Text>
+      </Link>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 20,
+  },
+  title: {
+    fontSize: 24,
+    marginBottom: 20,
+  },
+  text: {
+    fontSize: 16,
+    marginBottom: 20,
+  },
+  link: {
+    marginTop: 20,
+    padding: 10,
+    backgroundColor: '#eee',
+    borderRadius: 5,
+    alignSelf: 'flex-start',
+  },
+});
+
+
+---------------------------
+
+
+5. Contact Screen (app/(tabs)/contact.js)
+jsx
+import { View, Text, StyleSheet } from 'react-native';
+import { Link } from 'expo-router';
+
+export default function ContactPage() {
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Contact Us</Text>
+      <Text style={styles.text}>Email: contact@example.com</Text>
+      <Text style={styles.text}>Phone: (123) 456-7890</Text>
+      <Link href="/" style={styles.link}>
+        <Text>Back to Home</Text>
+      </Link>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 20,
+  },
+  title: {
+    fontSize: 24,
+    marginBottom: 20,
+  },
+  text: {
+    fontSize: 16,
+    marginBottom: 10,
+  },
+  link: {
+    marginTop: 20,
+    padding: 10,
+    backgroundColor: '#eee',
+    borderRadius: 5,
+    alignSelf: 'flex-start',
+  },
+});
+
+-------------------------------
+
+
+6. Login Screen (app/login.js)
+jsx
+import { View, Text, StyleSheet, TextInput, Button } from 'react-native';
+import { Link, router } from 'expo-router';
+
+export default function LoginPage() {
+  const handleLogin = () => {
+    // Authentication logic would go here
+    router.replace('/(tabs)/home');
+  };
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Login</Text>
+      
+      <TextInput
+        style={styles.input}
+        placeholder="Email"
+        keyboardType="email-address"
+      />
+      
+      <TextInput
+        style={styles.input}
+        placeholder="Password"
+        secureTextEntry
+      />
+      
+      <Button title="Login" onPress={handleLogin} />
+      
+      <Link href="/register" asChild>
+        <Button title="Create Account" />
+      </Link>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    padding: 20,
+  },
+  title: {
+    fontSize: 24,
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+  input: {
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    marginBottom: 15,
+    padding: 10,
+    borderRadius: 5,
+  },
+});
+7. Register Screen (app/register.js)
+jsx
+import { View, Text, StyleSheet, TextInput, Button } from 'react-native';
+import { Link, router } from 'expo-router';
+
+export default function RegisterPage() {
+  const handleRegister = () => {
+    // Registration logic would go here
+    router.replace('/(tabs)/home');
+  };
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Create Account</Text>
+      
+      <TextInput
+        style={styles.input}
+        placeholder="Name"
+      />
+      
+      <TextInput
+        style={styles.input}
+        placeholder="Email"
+        keyboardType="email-address"
+      />
+      
+      <TextInput
+        style={styles.input}
+        placeholder="Password"
+        secureTextEntry
+      />
+      
+      <Button title="Register" onPress={handleRegister} />
+      
+      <Link href="/login" asChild>
+        <Button title="Already have an account? Login" />
+      </Link>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    padding: 20,
+  },
+  title: {
+    fontSize: 24,
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+  input: {
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    marginBottom: 15,
+    padding: 10,
+    borderRadius: 5,
+  },
+});
+
+---------------------------------
+
+
+8. Index Redirect (app/index.js)
+jsx
+import { Redirect } from 'expo-router';
+
+export default function Index() {
+  return <Redirect href="/(tabs)/home" />;
+}
+Key Features of This Implementation
+File-based routing: Each screen corresponds to a file in the app directory
+
+Tab navigation: Home, About, and Contact are in a tab navigator
+
+Modal screens: Login and Register appear as modal screens
+
+Type-safe navigation: Expo Router provides type-safe navigation
+
+Deep linking: Routes automatically work with deep links
+
+Navigation Patterns Used
+Tabs: For the main app sections (Home, About, Contact)
+
+Stack: For the root navigation (tabs + auth screens)
+
+Modals: For Login and Register screens
+
+Links: For declarative navigation between screens
+
+-------------------------------------
+Running the App
+Start your development server:
+
+command:
+
+npx expo start
+
+---------------------------------------
+
+
+This implementation gives you a complete file-based navigation system with all the screens you requested, using Expo Router's convention-over-configuration approach. The navigation is type-safe and works with both iOS and Android.
+
+
+
+
+
+==================================
+
+
+Router-Based Navigation
+==================================
+
+Project Structure
+
+text
+src/
+├── navigation/
+│   ├── Router.js
+│   └── navigation.js
+├── screens/
+│   ├── HomePage.js
+│   ├── AboutPage.js
+│   ├── ContactPage.js
+│   ├── LoginPage.js
+│   └── RegisterPage.js
+└── App.js
+
+-------------------------------------------
+1. First, install required dependencies
+--------------------------------------------
+command:
+npm install @react-navigation/native @react-navigation/native-stack react-native-screens react-native-safe-area-context
+
+
+----------------------------------
+2. Create the screen components
+-----------------------------------
+
+
+screens/HomePage.js
+jsx
+import React from 'react';
+import { View, Text, StyleSheet, Button } from 'react-native';
+
+const HomePage = ({ navigation }) => {
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Home Page</Text>
+      <Button 
+        title="Go to About" 
+        onPress={() => navigation.navigate('About')}
+      />
+      <Button 
+        title="Go to Contact" 
+        onPress={() => navigation.navigate('Contact')}
+      />
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  title: {
+    fontSize: 24,
+    marginBottom: 20,
+  },
+});
+
+export default HomePage;
+screens/AboutPage.js
+jsx
+import React from 'react';
+import { View, Text, StyleSheet, Button } from 'react-native';
+
+const AboutPage = ({ navigation }) => {
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>About Us</Text>
+      <Button 
+        title="Go Back" 
+        onPress={() => navigation.goBack()}
+      />
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  title: {
+    fontSize: 24,
+    marginBottom: 20,
+  },
+});
+
+export default AboutPage;
+screens/ContactPage.js
+jsx
+import React from 'react';
+import { View, Text, StyleSheet, Button } from 'react-native';
+
+const ContactPage = ({ navigation }) => {
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Contact Us</Text>
+      <Button 
+        title="Go Back" 
+        onPress={() => navigation.goBack()}
+      />
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  title: {
+    fontSize: 24,
+    marginBottom: 20,
+  },
+});
+
+export default ContactPage;
+screens/LoginPage.js
+jsx
+import React from 'react';
+import { View, Text, StyleSheet, Button, TextInput } from 'react-native';
+
+const LoginPage = ({ navigation }) => {
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Login</Text>
+      <TextInput 
+        style={styles.input}
+        placeholder="Email"
+      />
+      <TextInput 
+        style={styles.input}
+        placeholder="Password"
+        secureTextEntry
+      />
+      <Button 
+        title="Login" 
+        onPress={() => navigation.navigate('Home')}
+      />
+      <Button 
+        title="Go to Register" 
+        onPress={() => navigation.navigate('Register')}
+      />
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  title: {
+    fontSize: 24,
+    marginBottom: 20,
+  },
+  input: {
+    width: '100%',
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    marginBottom: 10,
+    padding: 10,
+  },
+});
+
+export default LoginPage;
+screens/RegisterPage.js
+jsx
+import React from 'react';
+import { View, Text, StyleSheet, Button, TextInput } from 'react-native';
+
+const RegisterPage = ({ navigation }) => {
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Register</Text>
+      <TextInput 
+        style={styles.input}
+        placeholder="Name"
+      />
+      <TextInput 
+        style={styles.input}
+        placeholder="Email"
+      />
+      <TextInput 
+        style={styles.input}
+        placeholder="Password"
+        secureTextEntry
+      />
+      <Button 
+        title="Register" 
+        onPress={() => navigation.navigate('Login')}
+      />
+      <Button 
+        title="Go to Login" 
+        onPress={() => navigation.navigate('Login')}
+      />
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  title: {
+    fontSize: 24,
+    marginBottom: 20,
+  },
+  input: {
+    width: '100%',
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    marginBottom: 10,
+    padding: 10,
+  },
+});
+
+export default RegisterPage;
+
+-----------------------------------------
+3. Create the navigation configuration
+--------------------------------------
+
+navigation/navigation.js
+jsx
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
+const Stack = createNativeStackNavigator();
+
+export const AppNavigator = () => {
+  return (
+    <Stack.Navigator initialRouteName="Home">
+      <Stack.Screen name="Home" component={HomePage} />
+      <Stack.Screen name="About" component={AboutPage} />
+      <Stack.Screen name="Contact" component={ContactPage} />
+      <Stack.Screen name="Login" component={LoginPage} />
+      <Stack.Screen name="Register" component={RegisterPage} />
+    </Stack.Navigator>
+  );
+};
+
+
+-----------------------------------
+4. Create the Router component
+--------------------------------------
+
+navigation/Router.js
+jsx
+import { NavigationContainer } from '@react-navigation/native';
+import { AppNavigator } from './navigation';
+
+export const Router = () => {
+  return (
+    <NavigationContainer>
+      <AppNavigator />
+    </NavigationContainer>
+  );
+};
+
+--------------------------------------
+5. Update App.js
+--------------------------------------
+
+App.js
+jsx
+import React from 'react';
+import { Router } from './src/navigation/Router';
+import { HomePage } from './src/screens/HomePage';
+import { AboutPage } from './src/screens/AboutPage';
+import { ContactPage } from './src/screens/ContactPage';
+import { LoginPage } from './src/screens/LoginPage';
+import { RegisterPage } from './src/screens/RegisterPage';
+
+const App = () => {
+  return <Router />;
+};
+
+export default App;
+How to Use
+To navigate between screens, use the navigation prop that's automatically passed to each screen component:
+
+jsx
+navigation.navigate('ScreenName')
+To go back:
+
+jsx
+navigation.goBack()
+To navigate to the initial route:
+
+jsx
+navigation.popToTop()
+Additional Features You Might Want to Add
+Tab Navigation: For bottom or top tabs
+
+Drawer Navigation: For a side menu
+
+Authentication Flow: Conditional routing based on login status
+
+Deep Linking: Handle URLs to open specific screens
+
+TypeScript: Add type safety to your navigation
+
+
