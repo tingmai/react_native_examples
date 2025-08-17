@@ -1,0 +1,343 @@
+my-react-native-app/
+├── android/                  # Android native code
+├── ios/                     # iOS native code
+├── src/                     # Main application source code
+│   ├── assets/              # Static assets (images, fonts, etc.)
+│   │   └── images/          # App images
+│   ├── components/          # Reusable components
+│   │   └── Button.js        # Example component
+│   ├── constants/           # Constants and configs
+│   │   └── colors.js        # Color palette
+│   ├── navigation/          # Navigation configuration
+│   │   └── AppNavigator.js  # Main navigation setup
+│   ├── screens/             # Screen components
+│   │   ├── HomePage.js       # Home screen
+│   │   ├── AboutPage.js     # About screen
+│   │   └── ContactPage.js   # Contact screen
+│   ├── styles/              # Global styles
+│   │   └── globalStyles.js  # Shared styles
+│   └── utils/               # Utility functions
+│       └── helpers.js       # Helper functions
+├── App.js                   # Main application entry point
+├── package.json             # Project dependencies
+└── README.md                # Project documentation
+Detailed Explanation:
+Root Files
+
+App.js: Main entry point of your application
+
+package.json: Contains project dependencies and scripts
+
+Native Directories
+
+android/ and ios/: Contain platform-specific native code
+
+src/ Directory
+
+assets/: Store all static files like images, fonts, etc.
+
+components/: Reusable UI components used across multiple screens
+
+constants/: Global constants like colors, API URLs, etc.
+
+navigation/: All navigation-related configuration
+
+screens/: Each screen component (one file per screen)
+
+styles/: Global style definitions
+
+utils/: Helper functions and utilities
+
+Example Files:
+navigation/AppNavigator.js
+
+javascript
+import { createStackNavigator } from '@react-navigation/stack';
+import HomePage from '../screens/HomePage';
+import AboutPage from '../screens/AboutPage';
+import ContactPage from '../screens/ContactPage';
+
+const Stack = createStackNavigator();
+
+export default function AppNavigator() {
+  return (
+    <Stack.Navigator initialRouteName="Home">
+      <Stack.Screen name="Home" component={HomePage} />
+      <Stack.Screen name="About" component={AboutPage} />
+      <Stack.Screen name="Contact" component={ContactPage} />
+    </Stack.Navigator>
+  );
+}
+App.js
+
+javascript
+import 'react-native-gesture-handler';
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import AppNavigator from './src/navigation/AppNavigator';
+
+export default function App() {
+  return (
+    <NavigationContainer>
+      <AppNavigator />
+    </NavigationContainer>
+  );
+}
+constants/colors.js
+
+javascript
+export default {
+  primary: '#3498db',
+  secondary: '#2ecc71',
+  white: '#ffffff',
+  black: '#000000',
+  gray: '#7f8c8d',
+};
+styles/globalStyles.js
+
+javascript
+import { StyleSheet } from 'react-native';
+import colors from '../constants/colors';
+
+export default StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 20,
+    backgroundColor: colors.white,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: colors.black,
+    marginBottom: 20,
+  },
+  button: {
+    marginVertical: 10,
+  },
+});
+
+============
+command:
+
+
+npm install @react-navigation/native @react-navigation/stack
+npm install react-native-reanimated react-native-gesture-handler react-native-screens react-native-safe-area-context @react-native-community/masked-view
+
+
+------------------------
+2. App.js (Main Entry Point)
+-------------------------
+
+
+javascript
+import 'react-native-gesture-handler';
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import HomePage from './screens/HomePage';
+import AboutPage from './screens/AboutPage';
+import ContactPage from './screens/ContactPage';
+
+const Stack = createStackNavigator();
+
+export default function App() {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Home">
+        <Stack.Screen name="Home" component={HomePage} />
+        <Stack.Screen name="About" component={AboutPage} />
+        <Stack.Screen name="Contact" component={ContactPage} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}
+
+
+-------------------
+3. HomePage.js
+
+--------------------------
+javascript
+import React from 'react';
+import { View, Text, StyleSheet, Button } from 'react-native';
+
+const HomePage = ({ navigation }) => {
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Welcome to the Home Page</Text>
+      <View style={styles.buttonContainer}>
+        <Button
+          title="Go to About"
+          onPress={() => navigation.navigate('About')}
+        />
+      </View>
+      <View style={styles.buttonContainer}>
+        <Button
+          title="Go to Contact"
+          onPress={() => navigation.navigate('Contact')}
+        />
+      </View>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  title: {
+    fontSize: 24,
+    marginBottom: 20,
+  },
+  buttonContainer: {
+    margin: 10,
+    width: '80%',
+  },
+});
+
+export default HomePage;
+
+
+
+-------------------------
+4. AboutPage.js
+
+------------------------------
+
+
+
+javascript
+import React from 'react';
+import { View, Text, StyleSheet, Button } from 'react-native';
+
+const AboutPage = ({ navigation }) => {
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>About Us</Text>
+      <Text style={styles.text}>
+        This is a simple React Native navigation example.
+      </Text>
+      <View style={styles.buttonContainer}>
+        <Button title="Go Back" onPress={() => navigation.goBack()} />
+      </View>
+      <View style={styles.buttonContainer}>
+        <Button
+          title="Go to Contact"
+          onPress={() => navigation.navigate('Contact')}
+        />
+      </View>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  title: {
+    fontSize: 24,
+    marginBottom: 20,
+  },
+  text: {
+    fontSize: 16,
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+  buttonContainer: {
+    margin: 10,
+    width: '80%',
+  },
+});
+
+export default AboutPage;
+
+---------------------------
+5. ContactPage.js
+-------------------------------
+
+
+javascript
+import React from 'react';
+import { View, Text, StyleSheet, Button } from 'react-native';
+
+const ContactPage = ({ navigation }) => {
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Contact Us</Text>
+      <Text style={styles.text}>Email: contact@example.com</Text>
+      <Text style={styles.text}>Phone: (123) 456-7890</Text>
+      <View style={styles.buttonContainer}>
+        <Button title="Go Back" onPress={() => navigation.goBack()} />
+      </View>
+      <View style={styles.buttonContainer}>
+        <Button title="Go to Home" onPress={() => navigation.navigate('Home')} />
+      </View>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  title: {
+    fontSize: 24,
+    marginBottom: 20,
+  },
+  text: {
+    fontSize: 16,
+    marginBottom: 10,
+  },
+  buttonContainer: {
+    margin: 10,
+    width: '80%',
+  },
+});
+
+export default ContactPage;
+Additional Customization Options
+You can customize the header in the Stack Navigator by adding options:
+
+javascript
+<Stack.Navigator
+  initialRouteName="Home"
+  screenOptions={{
+    headerStyle: {
+      backgroundColor: '#f4511e',
+    },
+    headerTintColor: '#fff',
+    headerTitleStyle: {
+      fontWeight: 'bold',
+    },
+  }}
+>
+  {/* Your screens */}
+</Stack.Navigator>
+Or customize individual screens:
+
+javascript
+<Stack.Screen 
+  name="Home" 
+  component={HomePage} 
+  options={{
+    title: 'My Home',
+    headerRight: () => (
+      <Button
+        onPress={() => alert('This is a button!')}
+        title="Info"
+        color="#fff"
+      />
+    ),
+  }}
+/>
+
+================================
